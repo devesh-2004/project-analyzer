@@ -6,9 +6,9 @@ export async function GET(request: Request) {
 
     const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
     
-    // Dynamically generate the callback URL based on the environment (localhost vs vercel)
-    const url = new URL(request.url);
-    const REDIRECT_URI = `${url.origin}/api/auth/github/callback`;
+    // Use configured App URL, Vercel production URL, or fallback to the request origin
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : new URL(request.url).origin);
+    const REDIRECT_URI = `${appUrl}/api/auth/github/callback`;
 
     if (!GITHUB_CLIENT_ID) {
         return NextResponse.json(

@@ -19,8 +19,8 @@ export async function GET(request: Request) {
     }
 
     try {
-        const url = new URL(request.url);
-        const REDIRECT_URI = `${url.origin}/api/auth/github/callback`;
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : new URL(request.url).origin);
+        const REDIRECT_URI = `${appUrl}/api/auth/github/callback`;
 
         // Exchange code for access token
         const tokenResponse = await fetch(
