@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
         // Use the same model alias that works in analyze route
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
         const model = genAI.getGenerativeModel({
-            model: "gemini-flash-latest"
+            model: "gemini-2.5-flash"
         });
 
         const chat = model.startChat({

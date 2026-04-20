@@ -39,6 +39,10 @@ const mockAnalysisData = {
         { name: "Security", score: 90, icon: Shield },
         { name: "Best Practices", score: 88, icon: CheckCircle2 },
     ],
+    evaluationCriteria: [
+        { criterion: "Code Structure & Modularity", description: "Evaluating how well the codebase is organized into scalable, maintainable components." },
+        { criterion: "Security Best Practices", description: "Checking for common vulnerabilities, hardcoded secrets, and dependency risks." },
+    ],
     improvements: [
         {
             id: "1", category: "Testing", priority: "high", title: "Increase test coverage",
@@ -196,6 +200,22 @@ export default function AnalysisResultPage() {
                                                 </Card>
                                             ))}
                                         </div>
+
+                                        {analysisData.evaluationCriteria && analysisData.evaluationCriteria.length > 0 && (
+                                            <Card>
+                                                <CardHeader><CardTitle className="text-lg flex items-center gap-2"><CheckCircle2 className="h-5 w-5 text-primary" /> Evaluation Criteria</CardTitle></CardHeader>
+                                                <CardContent>
+                                                    <div className="grid gap-4 md:grid-cols-2">
+                                                        {analysisData.evaluationCriteria.map((criterion: any, idx: number) => (
+                                                            <div key={idx} className="bg-secondary/30 p-4 rounded-lg flex flex-col gap-1 border border-border/50">
+                                                                <h4 className="font-semibold text-sm flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-primary" />{criterion.criterion}</h4>
+                                                                <p className="text-sm text-muted-foreground">{criterion.description}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                        )}
 
                                         <Card>
                                             <CardHeader><CardTitle className="text-lg flex items-center gap-2"><Lightbulb className="h-5 w-5 text-primary" /> AI Improvement Roadmap</CardTitle></CardHeader>

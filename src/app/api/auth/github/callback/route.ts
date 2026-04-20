@@ -19,7 +19,12 @@ export async function GET(request: Request) {
     }
 
     try {
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : new URL(request.url).origin);
+        const requestOrigin = new URL(request.url).origin;
+        // Use NEXT_PUBLIC_APP_URL if it's explicitly set to a non-localhost domain
+        // Otherwise, rely on the actual request origin (which perfectly handles Vercel preview environments and localhost)
+        const appUrl = (process.env.NEXT_PUBLIC_APP_URL && !process.env.NEXT_PUBLIC_APP_URL.includes('localhost')) 
+            ? process.env.NEXT_PUBLIC_APP_URL 
+            : requestOrigin;
         const REDIRECT_URI = `${appUrl}/api/auth/github/callback`;
 
         // Exchange code for access token

@@ -113,6 +113,12 @@ export async function POST(req: NextRequest) {
       "roadmap": [
          { "phase": "Week 1", "title": "string", "tasks": ["string"] },
          { "phase": "Week 2", "title": "string", "tasks": ["string"] }
+      ],
+      "evaluationCriteria": [
+         {
+            "criterion": "string",
+            "description": "string"
+         }
       ]
     }
     
@@ -136,7 +142,7 @@ export async function POST(req: NextRequest) {
 
         // 4. Call Gemini
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-        const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
         const result = await model.generateContent({
             contents: [{ role: "user", parts: [{ text: systemInstruction + "\n\n" + userPrompt }] }],
             generationConfig: { responseMimeType: "application/json" }
