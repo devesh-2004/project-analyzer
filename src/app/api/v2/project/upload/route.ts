@@ -1,3 +1,4 @@
+import { generateContentWithRetry } from "@/utils/gemini";
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import AdmZip from "adm-zip";
@@ -96,7 +97,7 @@ ${readmeContent.substring(0, 5000)}
 ${sampleCode.substring(0, 8000)}
 `;
 
-        const result = await model.generateContent({
+        const result = await generateContentWithRetry(model, {
             contents: [{ role: "user", parts: [{ text: systemInstruction + "\n\n" + userPrompt }] }],
             generationConfig: { responseMimeType: "application/json" }
         });

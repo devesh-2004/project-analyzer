@@ -1,3 +1,4 @@
+import { generateContentWithRetry } from "@/utils/gemini";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { UnderstandingTest, UnderstandingEvaluation } from "../types";
 
@@ -35,7 +36,7 @@ Sample Code:
 ${sampleCode.substring(0, 4000)}
 `;
 
-  const result = await model.generateContent({
+  const result = await generateContentWithRetry(model, {
     contents: [{ role: "user", parts: [{ text: systemInstruction + "\n\n" + userPrompt }] }],
     generationConfig: { responseMimeType: "application/json" }
   });
@@ -75,7 +76,7 @@ Questions & Answers:
 ${JSON.stringify({ questions: originalQuestions, userAnswers: answers }, null, 2)}
 `;
 
-  const result = await model.generateContent({
+  const result = await generateContentWithRetry(model, {
     contents: [{ role: "user", parts: [{ text: systemInstruction + "\n\n" + userPrompt }] }],
     generationConfig: { responseMimeType: "application/json" }
   });

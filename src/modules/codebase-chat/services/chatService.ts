@@ -1,3 +1,4 @@
+import { sendMessageWithRetry } from "@/utils/gemini";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 
@@ -48,6 +49,6 @@ ${sampleCode.substring(0, 5000)}
     systemInstruction: { role: "system", parts: [{ text: systemInstruction }]}
   });
 
-  const result = await chatSession.sendMessage(message);
+  const result = await sendMessageWithRetry(chatSession, message);
   return result.response.text();
 }

@@ -1,3 +1,4 @@
+import { generateContentWithRetry } from "@/utils/gemini";
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
@@ -72,7 +73,7 @@ ${readmeContent.substring(0, 3000)}
 
 IMPORTANT: Return ONLY the raw Mermaid code block. Do NOT include Markdown formatting like \`\`\`mermaid or \`\`\`. Start immediately with 'graph'.`;
 
-        const result = await model.generateContent(prompt);
+        const result = await generateContentWithRetry(model, prompt);
         let text = result.response.text().trim();
         // Fallback cleanup if model injected markdown
         if (text.startsWith('```mermaid')) text = text.replace(/^```mermaid\n/, '');

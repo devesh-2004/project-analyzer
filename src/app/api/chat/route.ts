@@ -1,3 +1,4 @@
+import { sendMessageWithRetry } from "@/utils/gemini";
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
@@ -59,11 +60,19 @@ export async function POST(req: NextRequest) {
         });
 
         const lastMessage = chatHistory[chatHistory.length - 1].parts[0].text;
-        const result = await chat.sendMessage(lastMessage);
-        const response = result.response;
-        const text = response.text();
-
-        return NextResponse.json({ reply: text });
+        try {
+            const result = await sendMessageWithRetry(chat, lastMessage);
+            const response = result.response;
+            const text = response.text();
+            
+            return NextResponse.json({ reply: text });
+        } catch (genError: any) {
+            console.error("Gemini Generation Error:", genError.message);
+            // Fallback response so the UI doesn't crash on leaked/invalid API keys
+            return NextResponse.json({ 
+                reply: "Hello! It looks like there's an issue connecting strictly to the AI server right now (most likely an invalid or leaked API key). I'm currently running in 'mock' fallback mode so I can't analyze specific files, but your code dashboard seems to be running!" 
+            });
+        }
 
     } catch (error: any) {
         console.error("Chat API Error Details:", error);

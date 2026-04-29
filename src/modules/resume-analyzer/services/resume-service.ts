@@ -1,3 +1,4 @@
+import { generateContentWithRetry } from "@/utils/gemini";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ATSAnalysisResult } from "../types";
 
@@ -33,7 +34,7 @@ Provide the exact JSON output formatted as described:
 Do NOT include markdown syntax (like \`\`\`json). Return raw JSON only.
 `;
 
-  const result = await model.generateContent({
+  const result = await generateContentWithRetry(model, {
     contents: [
       { 
         role: "user", 
